@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.lang.management.ManagementFactory;
 import java.net.MalformedURLException;
 import java.util.Properties;
 
@@ -16,6 +17,7 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import com.test.demostore.helper.BaseDriver;
 import com.test.demostore.helper.Chrome;
 import com.test.demostore.helper.FireFox;
+import com.test.demostore.helper.Log;
 import com.test.demostore.helper.SeleniumConfig;
 
 import cucumber.api.java.After;
@@ -37,9 +39,13 @@ public class Hooks {
 		
     	System.out.println("Called setup()");    	
     	DOMConfigurator.configure("log4j.xml");
+    	
+    	long threadId = Thread.currentThread().getId();
+    	String processName = ManagementFactory.getRuntimeMXBean().getName();
+    	Log.info("Started in thread: " + threadId + ", in JVM: " + processName);
+    	System.out.println("Started in thread: " + threadId + ", in JVM: " + processName);
   	
-    	String browserName = "Chrome"; // this shoud get read from config
-     	driver = acquireDriver(browserName);
+       	driver = acquireDriver(SeleniumConfig.browserName);
     	if (driver != null)
     		System.out.println("Driver Initialized successfully");
     	

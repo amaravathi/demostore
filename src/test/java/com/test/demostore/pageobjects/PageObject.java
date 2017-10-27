@@ -12,6 +12,8 @@ import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.PageFactory;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import com.test.demostore.helper.Log;
 import com.test.demostore.helper.SeleniumConfig;
@@ -27,7 +29,7 @@ public  abstract class PageObject {
 	public void navigateTo(String URL) {
 		driver.get(URL);
 		PageFactory.initElements(driver, this);
-		driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
+		driver.manage().timeouts().implicitlyWait(SeleniumConfig.implicitWaitTime, TimeUnit.SECONDS);
 	}
 	public void Click(WebElement element) {
 		element.click();
@@ -60,14 +62,18 @@ public  abstract class PageObject {
 	}
 	public void captureScreenShot(String Name) {
 		File scrFile = ((TakesScreenshot)driver).getScreenshotAs(OutputType.FILE);
-        //The below method will save the screen shot in d drive with name "screenshot.png"
-		String fileName =SeleniumConfig.errImgDir+Name+".jpg";
+        
+		String fileName =SeleniumConfig.imgDir+Name+".jpg";
            try {
 			FileUtils.copyFile(scrFile, new File(fileName));
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			Log.error(e.getLocalizedMessage());
 		}
+	}
+	public void waitForEmtVisisbility(By emtLocator) {
+		WebDriverWait wait = new WebDriverWait(driver, SeleniumConfig.explicitWaitTime);
+		wait.until( ExpectedConditions.visibilityOfElementLocated(emtLocator) );		
 	}
 	
 }

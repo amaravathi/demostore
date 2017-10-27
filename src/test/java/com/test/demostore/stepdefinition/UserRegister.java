@@ -2,12 +2,13 @@ package com.test.demostore.stepdefinition;
 
 import static org.testng.AssertJUnit.assertEquals;
 
+import com.test.demostore.helper.DemoUtils;
 import com.test.demostore.helper.Log;
+import com.test.demostore.helper.SeleniumConfig;
 import com.test.demostore.pageobjects.UserRegisterPage;
 
 import cucumber.api.java.en.Given;
 import cucumber.api.java.en.Then;
-import cucumber.api.java.en.When;
 
 public class UserRegister  extends BasicStep{
 	private UserRegisterPage  userRegisterPage;
@@ -15,15 +16,10 @@ public class UserRegister  extends BasicStep{
 	public UserRegister() {
 		super();
 	}
-	@Given("^We are UserRegister Page$")
-	public void we_are_UserRegister_Page() throws Throwable {
+	@Given("^We are on userRegistration page$")
+	public void we_are_on_userRegistration_page() throws Throwable {
 		userRegisterPage = new UserRegisterPage(baseDriver.getDriver());
-		userRegisterPage.navigateTo("http://store.demoqa.com/products-page/your-account/");
-	}
-
-	@When("^Click on Register link$")
-	public void click_on_Register_link() throws Throwable {
-		userRegisterPage.registerLink.click();	  
+		userRegisterPage.navigateTo(SeleniumConfig.userRegisterPageUrl);
 	}
 
 	@Then("^UserName and Email textboxes should be available$")
@@ -38,20 +34,23 @@ public class UserRegister  extends BasicStep{
 	}
 	@Then("^Enter details in textboxes$")
 	public void enter_details_in_textboxes() throws Throwable {	    
-	    userRegisterPage.typeText(userRegisterPage.userName, "userName4");
-	    userRegisterPage.typeText(userRegisterPage.userEmail, "store.demo.test@gmail.com");
+	    userRegisterPage.typeText(userRegisterPage.userName, SeleniumConfig.newUserName);
+	    userRegisterPage.typeText(userRegisterPage.userEmail, SeleniumConfig.userRegistrationEmail);
 	}
 
 	@Then("^Submit$")
-	public void submit() throws Throwable {
-		String errFileName = this.getClass().getEnclosingMethod().getName();
+	public void registrationSubmit() throws Throwable {
+		
+		String imgFileName= DemoUtils.getImageFileName();
+		String className = this.getClass().getSimpleName();
+		//String methodName = Thread.currentThread().getStackTrace()[1].getMethodName();
 		try {
 	    userRegisterPage.registerSubmit.submit();	
 	    Log.info("Moved To URL : "+ userRegisterPage.getCurrentUrl());
-	    userRegisterPage.captureScreenShot(errFileName);
+	  //  userRegisterPage.captureScreenShot(imgFileName);
 	   assertEquals("Registration complete. Please check your email.",userRegisterPage.registrationMsg.getText());
 		}catch(Exception ex) {
-			userRegisterPage.captureScreenShot(errFileName);
+		//	userRegisterPage.captureScreenShot(imgFileName);
 		}
 	}
 

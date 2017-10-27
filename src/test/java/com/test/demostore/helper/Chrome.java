@@ -7,7 +7,7 @@ public class Chrome extends BaseDriver {
 
 	public Chrome() {
 		System.out.println("RootDir "+ SeleniumConfig.userProjDir);
-		System.out.println("RootDir "+ SeleniumConfig.errImgDir);
+		System.out.println("RootDir "+ SeleniumConfig.imgDir);
 		
 		System.setProperty("webdriver.chrome.driver", SeleniumConfig.userProjDir+"\\webdrivers\\chromedriver.exe");
 		driver = new ChromeDriver();
